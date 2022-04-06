@@ -11,8 +11,8 @@ const Timer: React.FC<Props> = ({interval, city, timezone}) => {
     }
     useEffect(() => {
         setInterval(tic, interval || 1000);
-    }, [])
-    return <div style={{marginLeft: '45vw', marginTop: '5vw'}}>
+    }, [interval])
+    return <div style={{marginTop: '5vw', textAlign: 'center'}}>
         <h3>{city}</h3>
         <label>{time.toLocaleTimeString('he-IL', {timeZone: timezone})}</label>
     </div>
