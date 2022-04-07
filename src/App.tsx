@@ -4,10 +4,10 @@ import Timer from './components/Timer';
 
 function App() {
   return <div>
-    <Timer interval={1000} city={'Tel Aviv'} timezone={'Asia/Jerusalem'}/>
-    <Timer interval={1000} city={'New York'} timezone={'America/New_York'}/>
-    <Timer interval={1000} city={'Beijing'} timezone={'Asia/Shanghai'}/>
-    <Timer interval={1000} city={'London'} timezone={'Europe/London'}/>
+    <Timer city={'Jerusalem'} timeZone={'Asia/Jerusalem'}/>
+    <Timer city={'New York'} timeZone={'America/New_York'}/>
+    <Timer city={'Beijing'} timeZone={'Asia/Shanghai'}/>
+    <Timer city={'London'} timeZone={'Europe/London'}/>
     </div>
 }
 
