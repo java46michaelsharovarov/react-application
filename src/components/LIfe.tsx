@@ -8,8 +8,7 @@ type Props = {
     ticInteval: number
 }
 const Life: React.FC<Props> = ({dimension, ticInteval}) => {
-    const lifeMatrix = useRef<LifeMatrix>(new LifeMatrix(getRandomMatrix(dimension, dimension, 0, 1)));
-    // getRandomMatrix(dimension, dimension, 0, 1)  lifeGameConfig.matrixTest3 // TEST!!!!!!!!!!!!!!!!!!
+    const lifeMatrix = useRef<LifeMatrix>(new LifeMatrix(getRandomMatrix(dimension, dimension, 0, 1))); // lifeGameConfig.matrixTest4 // TEST!!!!!!!!!!!!!!!!!!
     const [numbers, setNumbers] = useState<number[][]>(lifeMatrix.current.numbers);
     function tic() {
         setNumbers(lifeMatrix.current.nextStep());
