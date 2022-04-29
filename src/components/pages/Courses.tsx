@@ -1,8 +1,11 @@
 import React from "react";
-import { coursesService } from "../../config/service-config";
+import { useSelector } from "react-redux";
+import { Course } from "../../models/Course";
+import { StateType } from "../../redux/store"
 const Courses: React.FC = () => {
+    const courses: Course[] = useSelector<StateType, Course[]>(state => state.courses);
     return  <ul>
-                {coursesService.get().map(i => <li key={i.id}>{JSON.stringify(i)}</li>)}
+                {courses.map(i => <li key={i.id}>{JSON.stringify(i)}</li>)}
             </ul>
 }
 export default Courses;
