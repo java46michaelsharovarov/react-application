@@ -12,7 +12,7 @@ export function useImitator() {
     const dispatch = useDispatch();
     const courses: Course[] = useSelector<StateType, Course[]>(state => state.courses);
     useEffect(() => {
-        const intervalId = setInterval(action, 1000)
+        const intervalId = setInterval(action, 500)
         return () => clearInterval(intervalId)
     }, [courses]);    
     function action() {
@@ -28,24 +28,23 @@ export function useImitator() {
     function dispatchAdd() {
         dispatch(addCourse(getRandomCourse(courseData)))
     }
-    function dispatchRemove(courses: Course[]) {        
-        const index = getRandomNumber(0, courses.length);
+    function dispatchRemove(courses: Course[]) {  
+        if(courses.length > 0) {   
+        const index = getRandomNumber(0, courses.length - 1);
         const id = courses[index].id;
         dispatch(removeCourse(id));
+        }
     }
     function dispatchUpdate(courses: Course[]) {
-        const index = getRandomNumber(0, courses.length);        
+        if(courses.length > 0) {
+        const index = getRandomNumber(0, courses.length - 1);        
         const course = getRandomCourse(courseData);
         course.id = courses[index].id;
         dispatch(updateCourse(course));
+        }
     }
 }
 
-function getAction(number: number): ImitatorAction {
-    for(let i = 0; i < imitatorActions.length; i++) {
-        if(number < imitatorActions[i].prob) {
-            return imitatorActions[i];
-        }
-    }
-    return imitatorActions[imitatorActions.length - 1];
+function getAction(num: number): ImitatorAction {
+    return imitatorActions.find(ia => num <= ia.prob) ?? imitatorActions[imitatorActions.length - 1]
 }

@@ -11,14 +11,12 @@ const App: React.FC = () => {
   return <BrowserRouter>
             <Navigator items={ROUTES} />
             {flNavigate && <Navigate to={COURSES_PATH}></Navigate>}
-            <div style={{marginTop: '5vh', display: 'flex', justifyContent: 'center'}}>
+            <div style={{marginTop: '5vw', display: 'flex', justifyContent: 'center'}}>
               <Routes>
                 {getRoutes()}
               </Routes>
             </div>
          </BrowserRouter>
-
-
 }
 function getRoutes(): React.ReactNode {
   return ROUTES.map(r => <Route key={r.path} path={r.path} element={r.element} />)
