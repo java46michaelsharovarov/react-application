@@ -16,7 +16,7 @@ const Courses: React.FC = () => {
         { field: 'openingDate', headerName: 'Date', disableColumnMenu: true, flex:1, minWidth: 90}        
       ];           
         return (
-          <Box sx={{height: '80vh', width: '100%'}}>
+          <Box sx={{height: '80vh', width: '100%', mt: {sm: '-8vw', md: '0'}}}>
             <DataGrid
               rows={courses}
               columns={columns}
