@@ -1,4 +1,5 @@
 import { Course } from "../models/Course";
+import { RouteType } from "../models/RouteType";
 export function range(firstIndex: number, lastIndex: number): number[] {
     const resArray: number[] = [];
     for(let i = firstIndex; i < lastIndex; i++) {
@@ -19,3 +20,10 @@ export default function getStatistics(array: Course[], key: keyof Course): {min:
     res.avg = Math.round(res.avg / array.length);
     return res;
 } 
+export function getRouteIndex(items: RouteType[], pathName: string): number {
+    let index = items.findIndex(item => item.path === pathName)
+    if(index < 0) {
+        index = 0;
+    }
+    return index;
+}

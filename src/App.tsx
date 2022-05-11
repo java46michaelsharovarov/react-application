@@ -2,20 +2,21 @@ import React from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { COURSES_PATH, ROUTES } from './config/routes-config';
 import Navigator from './components/navigators/Navigator';
-import { useImitator } from './util/useImitator';
+import { Box } from '@mui/material';
+// import { useImitator } from './util/useImitator';
 
 const App: React.FC = () => {
-  useImitator();
+  // useImitator();
   const [flNavigate, setFlNavigate] = React.useState<boolean>(true);
   React.useEffect(() => setFlNavigate(false), [])
   return <BrowserRouter>
             <Navigator items={ROUTES} />
             {flNavigate && <Navigate to={COURSES_PATH}></Navigate>}
-            <div style={{marginTop: '5vw', display: 'flex', justifyContent: 'center'}}>
+            <Box sx={{display: 'flex', justifyContent: 'center', width: '100%'}}>
               <Routes>
                 {getRoutes()}
               </Routes>
-            </div>
+            </Box>
          </BrowserRouter>
 }
 function getRoutes(): React.ReactNode {

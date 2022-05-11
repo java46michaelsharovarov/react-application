@@ -3,7 +3,7 @@ import { getRandomCourse } from "../../util/randomCourse";
 import courseData from "../../config/courseData.json"
 import { useDispatch } from "react-redux";
 import { addCourse } from "../../redux/actions";
-import { range } from "../../util/statistic";
+import { range } from "../../util/functions";
 import { Button, TextField } from "@mui/material";
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 let inputElement: any;

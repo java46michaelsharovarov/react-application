@@ -6,6 +6,13 @@ import Logout from "../components/pages/Logout";
 import StatisticCost from "../components/pages/StatisticCost";
 import StatisticHours from "../components/pages/StatisticHours";
 import { RouteType } from "../models/RouteType";
+import AddIcon from '@mui/icons-material/Add';
+import ListIcon from '@mui/icons-material/List';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
 export const COURSES_PATH = '/';
 export const ADD_COURSE_PATH = '/course/add';
 export const STATISTIC_HOURS_PATH = '/statistic/hours';
@@ -14,11 +21,11 @@ export const LOGIN_PATH = '/login';
 export const LOGOUT_PATH = '/logout';
 export const GENERATION_PATH = '/generation';
 export const ROUTES: RouteType[] = [
-    {path: COURSES_PATH, label: 'Courses', element: <Courses/>},
-    {path: ADD_COURSE_PATH, label: 'New Course', element: <AddCourse/>},
-    {path: STATISTIC_HOURS_PATH, label: 'Statistic Hours', element: <StatisticHours/>},
-    {path: STATISTIC_COST_PATH, label: 'Statistic Cost', element: <StatisticCost/>},
-    {path: LOGIN_PATH, label: 'Login', element: <Login/>},
-    {path: LOGOUT_PATH, label: 'Logout', element: <Logout/>},
-    {path: GENERATION_PATH, label: 'Generation', element: <Generation/>}
+    {path: COURSES_PATH, label: 'Courses', element: <Courses/>, icon: <ListIcon color="primary"/>},
+    {path: ADD_COURSE_PATH, label: 'New Course', element: <AddCourse/>, icon: <AddIcon color="primary"/>},
+    {path: STATISTIC_HOURS_PATH, label: 'Statistic Hours', element: <StatisticHours/>, icon: <AccessTimeIcon color="primary"/>},
+    {path: STATISTIC_COST_PATH, label: 'Statistic Cost', element: <StatisticCost/>, icon: <AttachMoneyIcon color="primary"/>},
+    {path: LOGIN_PATH, label: 'Login', element: <Login/>, icon: <LoginIcon color="primary"/>},
+    {path: LOGOUT_PATH, label: 'Logout', element: <Logout/>, icon: <LogoutIcon color="primary"/>},
+    {path: GENERATION_PATH, label: 'Generation', element: <Generation/>, icon: <PlaylistAddIcon color="primary"/>}
 ];

@@ -15,12 +15,12 @@ const Courses: React.FC = () => {
         { field: 'openingDate', headerName: 'Date', disableColumnMenu: true, flex:1}        
       ];           
         return (
-          <div style={{width: '100%', marginTop: '-5vw'}}>
+          <div style={{height: '80vh', width: '100%'}}>
             <DataGrid
               rows={courses}
               columns={columns}
-              pageSize={20}
-              autoHeight
+              pageSize={30}
+              rowsPerPageOptions={[30]}
               rowHeight={30}
             />
           </div>

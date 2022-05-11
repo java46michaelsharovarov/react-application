@@ -1,14 +1,10 @@
 import React from "react";
-import { getRandomCourse } from "../../util/randomCourse";
-import courseData from "../../config/courseData.json"
 import { useDispatch } from "react-redux";
 import { addCourse } from "../../redux/actions";
-import { Button } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
+import CourseForm from "../forms/CourseForm";
+import { Course } from "../../models/Course";
 const AddCourse: React.FC = () => {
     const dispatch = useDispatch();
-    return <Button onClick={() => dispatch(addCourse(getRandomCourse(courseData)))} variant="contained" endIcon={<AddIcon />}>
-                Add Course
-           </Button>
+    return <CourseForm submitFn={(course: Course) => dispatch(addCourse(course))}/>
 }
 export default AddCourse;
