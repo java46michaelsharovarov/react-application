@@ -7,7 +7,7 @@ import getStatistics from "../../util/functions";
 const StatisticHours: React.FC = () => {
     const courses: Course[] = useSelector<StateType, Course[]>(state => state.courses);
     const resObj = getStatistics(courses, 'hours');
-    return  <TableContainer component={Paper} sx={{width: { xs:'100vw', sm:'80vw', md: '50vw' }, textAlign: 'center'}}>
+    return  <TableContainer component={Paper} sx={{width: { xs:'90vw', sm:'80vw', md: '50vw' }, textAlign: 'center'}}>
                 {
                     !resObj.min? <label style={{fontSize: "1.5em"}}>No Data</label>
                     : (<Table size='small'>
