@@ -44,7 +44,7 @@ const CourseForm: React.FC<Props> = ({ submitFn }) => {
         setCourse(courseCopy);
     }
     return <form onSubmit={onSubmit} onReset={onReset} style={{ width: '80%', display: 'flex' }}>
-        <Grid container spacing={4}>
+        <Grid container sx={{mt: {sm: '-10vw', md: '0'}}} spacing={{ xs: 4, sm: 2, md: 4 }} justifyContent="center" alignItems="center">
             <Grid item xs={12} sm={6} >
                 <FormControl fullWidth required>
                     <InputLabel id="course-select-label">Course Name</InputLabel>
