@@ -6,6 +6,7 @@ import { addCourse } from "../../redux/actions";
 import { range } from "../../util/functions";
 import { Button, Grid, TextField } from "@mui/material";
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import { Link as RouterLink} from "react-router-dom";
 let inputElement: any;
 const Generation: React.FC = () => {
     useEffect(() => {inputElement = document.getElementById("inputGeneration")}, [])
@@ -15,10 +16,13 @@ const Generation: React.FC = () => {
     }
     return  <Grid container maxWidth="sm" spacing = {4} justifyContent="center" alignItems="center">
                 <Grid item xs={10} sm={6}>
-                    <TextField id="inputGeneration" fullWidth size="small" type="number" label="Enter the number of courses" variant="outlined" required/>                    
+                    <TextField id="inputGeneration" fullWidth size="small" type="number"
+                         label="Enter the number of courses" variant="outlined" required/>                    
                 </Grid>
                 <Grid item xs={10} sm={6}>
-                    <Button onClick={coursesGeneration} fullWidth variant="contained" endIcon={<PlaylistAddIcon />}>
+                    <Button onClick={coursesGeneration} 
+                     key={"/"} component={RouterLink} to={"/"} 
+                     fullWidth variant="contained" endIcon={<PlaylistAddIcon />}>
                         Generation
                     </Button>
                 </Grid>    

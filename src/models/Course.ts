@@ -4,8 +4,8 @@ export type Course = {
     lecturer: string;
     hours: number;
     cost: number;
-    openingDate: string
+    openingDate: Date
 }
-export function createCourse(id: number, name: string, lecturer: string, hours: number, cost: number, openingDate: string): Course {
-    return {id, name, lecturer, hours, cost, openingDate: openingDate.substring(1, 11)};
+export function createCourse(id: number, name: string, lecturer: string, hours: number, cost: number, openingDate: Date): Course {
+    return {id, name, lecturer, hours, cost, openingDate};
 }
