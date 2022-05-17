@@ -78,7 +78,7 @@ const Courses: React.FC = () => {
     confirmationData.current.title = 'Updating course';
     confirmationData.current.content = `Update course data with id:${course.id} to
      ( name: ${course.name}, lecturer: ${course.lecturer}, hours: ${course.hours},
-     cost: ${course.cost}, date: ${JSON.stringify(getIsoDate(course.openingDate)).substring(0, 11)} ) ?`;
+       cost: ${course.cost}, date: ${JSON.stringify(getIsoDate(course.openingDate)).substring(0, 11)} ) ?`;
     setFlOpen(true);
   }
   function removeAction(id: number, flConfirm: boolean): void {
@@ -101,7 +101,7 @@ const Courses: React.FC = () => {
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <CourseForm
               submitFn={(course: Course) => { 
-                if(course.id !== 0){
+                if(JSON.stringify(course) !== JSON.stringify(updatedCourse.current)){
                   showUpdateConfirmation(course); 
                 }
                 setEdit(false) }}

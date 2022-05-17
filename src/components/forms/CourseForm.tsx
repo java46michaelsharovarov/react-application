@@ -18,7 +18,7 @@ const CourseForm: React.FC<Props> = ({ submitFn , courseUpdate}) => {
         !!courseUpdate || document.querySelector('form')!.reset();
     }
     function onReset() {
-        !!courseUpdate ? submitFn(initialCourse): setCourse(initialCourse);
+        !!courseUpdate ? submitFn(courseUpdate): setCourse(initialCourse);
     }
     function handlerCourse(event: any) {
         const courseCopy = { ...course, name: event.target.value };
