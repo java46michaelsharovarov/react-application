@@ -2,23 +2,23 @@ import React from "react";
 import { Course, createCourse } from "../../models/Course";
 import courseData from "../../config/courseData.json";
 import { Grid, Select, TextField, FormControl, InputLabel, MenuItem, Button} from "@mui/material";
+import { getIsoDate } from "../../util/functions";
 type Props = {
     submitFn: (course: Course) => void;
-    passCourse?: Course;
+    courseUpdate?: Course;
 }
-const initialCourse: Course = createCourse(0, "", "", 0, 0, new Date());
+const initialCourse: Course = createCourse(0, "", "", 0, 0, new Date("0000-00-00"));
 
-const CourseForm: React.FC<Props> = ({ submitFn , passCourse}) => {
+const CourseForm: React.FC<Props> = ({ submitFn , courseUpdate}) => {
     const { courses, lecturers, minCost, maxCost, minHours, maxHours, minYear, maxYear } = courseData; 
-    const isUpdating = passCourse ? true : false
-    const [course, setCourse] = React.useState(passCourse || initialCourse);
+    const [course, setCourse] = React.useState(courseUpdate || initialCourse);
     function onSubmit(event: any) {
         event.preventDefault();
         submitFn(course);
-        isUpdating || document.querySelector('form')!.reset();
+        !!courseUpdate || document.querySelector('form')!.reset();
     }
     function onReset() {
-        isUpdating ? submitFn(passCourse as Course): setCourse(initialCourse);
+        !!courseUpdate ? submitFn(initialCourse): setCourse(initialCourse);
     }
     function handlerCourse(event: any) {
         const courseCopy = { ...course, name: event.target.value };
@@ -45,7 +45,7 @@ const CourseForm: React.FC<Props> = ({ submitFn , passCourse}) => {
         <Grid container sx={{mt: {sm: '-8vw', md: '0'}}}
               spacing={{ xs: 4, sm: 1, md: 6 }} justifyContent="center" alignItems="center">
             <Grid item xs={12} sx={{textAlign: 'center', fontSize:'1.5em' }}>
-                {isUpdating ? `Updating course with id ${course.id}` : "Adding New Course"}
+                {!!courseUpdate ? `Updating course with id ${course.id}` : "Adding New Course"}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <FormControl fullWidth required>
@@ -56,7 +56,7 @@ const CourseForm: React.FC<Props> = ({ submitFn , passCourse}) => {
                         label="Course Name"
                         value={course.name}
                         onChange={handlerCourse}
-                        disabled = {isUpdating ? true : false} 
+                        disabled = {!!courseUpdate}
                     >
                         {getCourseItems(courses)}
                     </Select>
@@ -96,7 +96,8 @@ const CourseForm: React.FC<Props> = ({ submitFn , passCourse}) => {
             </Grid>
             <Grid item xs={10}>
                 <TextField type="date" label="Date" fullWidth required 
-                defaultValue={isUpdating ? JSON.stringify(course.openingDate).substring(1, 11) : ''}
+                value={!!course.openingDate.getFullYear() ?
+                    getIsoDate(course.openingDate) : ''}
                 onChange={handlerDate}
                     InputLabelProps={{
                         shrink: true,
@@ -111,7 +112,7 @@ const CourseForm: React.FC<Props> = ({ submitFn , passCourse}) => {
                 <Button fullWidth variant="contained" type="submit">Submit</Button>
             </Grid>
             <Grid item xs={3}>
-                <Button fullWidth variant="contained" type="reset">{isUpdating ? 'Cancel' : 'Reset'}</Button>
+                <Button fullWidth variant="contained" type="reset">{!!courseUpdate ? 'Cancel' : 'Reset'}</Button>
             </Grid>
         </Grid>
     </form>

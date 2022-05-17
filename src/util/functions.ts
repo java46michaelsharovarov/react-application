@@ -27,3 +27,10 @@ export function getRouteIndex(items: RouteType[], pathName: string): number {
     }
     return index;
 }
+export function getIsoDate(dateValue: Date): string {
+    const day = dateValue.getDate() + 1;
+    const month = dateValue.getMonth();
+    const year = dateValue.getFullYear();
+    const dateUTC = new Date(year, month, day);
+    return dateUTC.toISOString().substring(0, 10);
+}
