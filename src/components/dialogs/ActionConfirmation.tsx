@@ -15,6 +15,7 @@ const Transition = React.forwardRef(function Transition(
   ) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
+  
 const ActionConfirmation: React.FC<Props> = ({ open, title, content, confirmHandler }) => {
     return  <Dialog
                 open={open}

@@ -8,6 +8,7 @@ import { Button, Grid, TextField } from "@mui/material";
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import { Link as RouterLink} from "react-router-dom";
 let inputElement: any;
+
 const Generation: React.FC = () => {
     useEffect(() => {inputElement = document.getElementById("inputGeneration")}, [])
     const dispatch = useDispatch();

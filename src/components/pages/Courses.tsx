@@ -10,6 +10,7 @@ import CourseForm from "../forms/CourseForm";
 import ActionConfirmation from "../dialogs/ActionConfirmation";
 import ConfirmationData from "../../models/ConfirmationData";
 import { getIsoDate } from "../../util/functions";
+import { ClientData } from "../../models/ClientData";
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -39,6 +40,7 @@ function getColumns(actionsFn: (params: GridRowParams) => JSX.Element[]): GridCo
 const Courses: React.FC = () => {
   const dispatch = useDispatch();
   const courses: Course[] = useSelector<StateType, Course[]>(state => state.courses);
+  const clientData: ClientData = useSelector<StateType, ClientData>(state => state.clientData);
   const [isEdit, setEdit] = useState(false);
   const [flOpen, setFlOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -49,14 +51,18 @@ const Courses: React.FC = () => {
   isMobileOrTablet = useMediaQuery('(min-width: 600px)');
 
   function getActions(params: GridRowParams): JSX.Element[] {
-    const actionElements: JSX.Element[] = [
-      <GridActionsCellItem label="Remove" showInMenu= {!isMobileOrTablet}
-        onClick={() => {showRemoveConfirmation(params.id as number)}} icon={<Delete />} />,
+    const actionElements: JSX.Element[] = clientData.isAdmin ? [
+      <GridActionsCellItem label="Details" showInMenu= {!isMobileOrTablet}
+        onClick={showDetails.bind(undefined, params.id as number)} icon={<Visibility />} />,      
       <GridActionsCellItem label="Edit" showInMenu= {!isMobileOrTablet}
         onClick={() => editFn(params.id as number)} icon={<Edit />} />,
+      <GridActionsCellItem label="Remove" showInMenu= {!isMobileOrTablet}
+        onClick={() => {showRemoveConfirmation(params.id as number)}} icon={<Delete />} />      
+    ] 
+    : [
       <GridActionsCellItem label="Details" showInMenu= {!isMobileOrTablet}
-        onClick={showDetails.bind(undefined, params.id as number)} icon={<Visibility />} />
-    ]
+        onClick={showDetails.bind(undefined, params.id as number)} icon={<Visibility />} /> 
+    ] 
     return actionElements;
   }
   function showDetails(id: number) {
@@ -78,7 +84,8 @@ const Courses: React.FC = () => {
     confirmationData.current.title = 'Updating course';
     confirmationData.current.content = `Update course data with id:${course.id} to
      ( name: ${course.name}, lecturer: ${course.lecturer}, hours: ${course.hours},
-       cost: ${course.cost}, date: ${JSON.stringify(getIsoDate(course.openingDate)).substring(0, 11)} ) ?`;
+       cost: ${course.cost}, 
+       date: ${JSON.stringify(getIsoDate(course.openingDate)).substring(0, 11)} ) ?`;
     setFlOpen(true);
   }
   function removeAction(id: number, flConfirm: boolean): void {

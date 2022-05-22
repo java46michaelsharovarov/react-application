@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Course } from "../../models/Course";
 import { StateType } from "../../redux/store";
 import getStatistics from "../../util/functions";
+
 const StatisticCost: React.FC = () => {
     const courses: Course[] = useSelector<StateType, Course[]>(state => state.courses);
     const resObj = getStatistics(courses, 'cost');    

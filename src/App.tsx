@@ -1,25 +1,40 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { COURSES_PATH, ROUTES } from './config/routes-config';
+import { COURSES_PATH, LOGIN_PATH, ROUTES } from './config/routes-config';
 import Navigator from './components/navigators/Navigator';
 import { Box } from '@mui/material';
+import { ClientData } from './models/ClientData';
+import { useSelector } from 'react-redux';
+import { StateType } from './redux/store';
+import { RouteType } from './models/RouteType';
 // import { useImitator } from './util/useImitator';
 
 const App: React.FC = () => {
   // useImitator();
+  const clientData: ClientData = useSelector<StateType, ClientData>(state => state.clientData)
   const [flNavigate, setFlNavigate] = React.useState<boolean>(true);
+  const relevantItems: RouteType[] = useMemo<RouteType[]> (() => getRelevantItems(clientData), [clientData])
   React.useEffect(() => setFlNavigate(false), [])
-  return <BrowserRouter>
-            <Navigator items={ROUTES} />
-            {flNavigate && <Navigate to={COURSES_PATH}></Navigate>}
+  return <BrowserRouter>  
+            <Navigator items={relevantItems} />
+            {(flNavigate && ((clientData.email && <Navigate to={COURSES_PATH}/>) 
+                || (!clientData.email && <Navigate to={LOGIN_PATH}/>)))
+            }
             <Box sx={{display: 'flex', justifyContent: 'center', width: '100%'}}>
               <Routes>
-                {getRoutes()}
+                {getRoutes(relevantItems)}
               </Routes>
             </Box>
          </BrowserRouter>
 }
-function getRoutes(): React.ReactNode {
-  return ROUTES.map(r => <Route key={r.path} path={r.path} element={r.element} />)
+function getRoutes(relevantItems: RouteType[]): React.ReactNode {
+  return relevantItems.map(r => <Route key={r.path} path={r.path} element={r.element} />)
 }
 export default App;
+
+function getRelevantItems(clientData: ClientData): RouteType[] {
+  return ROUTES.filter(r => 
+    (!!clientData.email && ((clientData.isAdmin && r.authenticated) || (!clientData.isAdmin  && r.authenticated && r.forUser))) 
+    || (!clientData.email && !r.authenticated)); 
+}
+
