@@ -13,7 +13,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
-export const COURSES_PATH = '/courses';
+export const COURSES_PATH = '/';
 export const ADD_COURSE_PATH = '/course/add';
 export const STATISTIC_HOURS_PATH = '/statistic/hours';
 export const STATISTIC_COST_PATH = '/statistic/cost';

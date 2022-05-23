@@ -17,8 +17,9 @@ const App: React.FC = () => {
   React.useEffect(() => setFlNavigate(false), [])
   return <BrowserRouter>  
             <Navigator items={relevantItems} />
-            {(flNavigate && ((clientData.email && <Navigate to={COURSES_PATH}/>) 
-                || (!clientData.email && <Navigate to={LOGIN_PATH}/>)))
+            {flNavigate && (clientData.email 
+                              ? <Navigate to={COURSES_PATH}/> 
+                              : <Navigate to={LOGIN_PATH}/>) 
             }
             <Box sx={{display: 'flex', justifyContent: 'center', width: '100%'}}>
               <Routes>
@@ -33,8 +34,8 @@ function getRoutes(relevantItems: RouteType[]): React.ReactNode {
 export default App;
 
 function getRelevantItems(clientData: ClientData): RouteType[] {
-  return ROUTES.filter(r => 
-    (!!clientData.email && ((clientData.isAdmin && r.authenticated) || (!clientData.isAdmin  && r.authenticated && r.forUser))) 
-    || (!clientData.email && !r.authenticated)); 
+  return ROUTES.filter(r => !!clientData.email 
+      ? (clientData.isAdmin ? r.authenticated : r.forUser) 
+      : !r.authenticated); 
 }
 

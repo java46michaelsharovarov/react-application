@@ -2,7 +2,7 @@ import React from "react";
 import { Course, createCourse } from "../../models/Course";
 import courseData from "../../config/courseData.json";
 import { Grid, Select, TextField, FormControl, InputLabel, MenuItem, Button} from "@mui/material";
-import { getIsoDate } from "../../util/functions";
+import { getCanonicalLocalDate } from "../../util/functions";
 type Props = {
     submitFn: (course: Course) => void;
     courseUpdate?: Course;
@@ -97,7 +97,7 @@ const CourseForm: React.FC<Props> = ({ submitFn , courseUpdate}) => {
             <Grid item xs={10}>
                 <TextField type="date" label="Date" fullWidth required 
                 value={!!course.openingDate.getFullYear() ?
-                    getIsoDate(course.openingDate) : ''}
+                    getCanonicalLocalDate(course.openingDate) : ''}
                 onChange={handlerDate}
                     InputLabelProps={{
                         shrink: true,

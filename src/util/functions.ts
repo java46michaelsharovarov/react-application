@@ -34,3 +34,8 @@ export function getIsoDate(dateValue: Date): string {
     const dateUTC = new Date(year, month, day);
     return dateUTC.toISOString().substring(0, 10);
 }
+export function getCanonicalLocalDate(date: Date) : string{ // returns local date as YYYY-MM-DD
+    const offset: number  = date.getTimezoneOffset()
+    date = new Date(date.getTime() - (offset*60*1000))
+    return date.toISOString().split('T')[0]
+}

@@ -10,20 +10,16 @@ import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
 import LoginForm from "../forms/LoginForm";
+import { useNavigate } from 'react-router-dom';
 import { COURSES_PATH } from '../../config/routes-config';
-import { Navigate } from 'react-router-dom';
 const authService = new AuthServiceClient(); 
 
 const Login: React.FC = () => {
+    const navigate = useNavigate();    
     const dispatch = useDispatch();
     const [error, setError] = React.useState(false);
     return  <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-                <LoginForm submitFn={(loginData: LoginData) => {
-                    const clientData = authService.login(loginData);
-                    !!clientData ? dispatch(authAction(clientData as ClientData))
-                   : setError(true);
-                }}/>                
-                <Collapse sx={{ width: '90%' }} in={error}>
+                <Collapse sx={{ mt: { sm: -7, md: 0}, width: '90%' }} in={error}>
                     <Alert severity="error"
                     action={
                         <IconButton
@@ -41,7 +37,14 @@ const Login: React.FC = () => {
                     >
                      Incorrect email or/and password
                     </Alert>
-                </Collapse>                
+                </Collapse>
+                <LoginForm submitFn={(loginData: LoginData) => {
+                    const clientData = authService.login(loginData);
+                    if(!!clientData) {
+                        dispatch(authAction(clientData as ClientData));
+                        navigate(COURSES_PATH)
+                     } else { setError(true);}
+                }} closeAlert={()=> setError(false)}/> 
             </Box>           
 }
 export default Login;

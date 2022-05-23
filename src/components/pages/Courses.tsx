@@ -9,7 +9,7 @@ import { removeCourse, updateCourse } from "../../redux/actions";
 import CourseForm from "../forms/CourseForm";
 import ActionConfirmation from "../dialogs/ActionConfirmation";
 import ConfirmationData from "../../models/ConfirmationData";
-import { getIsoDate } from "../../util/functions";
+import { getCanonicalLocalDate } from "../../util/functions";
 import { ClientData } from "../../models/ClientData";
 const style = {
   position: 'absolute' as 'absolute',
@@ -85,7 +85,7 @@ const Courses: React.FC = () => {
     confirmationData.current.content = `Update course data with id:${course.id} to
      ( name: ${course.name}, lecturer: ${course.lecturer}, hours: ${course.hours},
        cost: ${course.cost}, 
-       date: ${JSON.stringify(getIsoDate(course.openingDate)).substring(0, 11)} ) ?`;
+       date: ${getCanonicalLocalDate(course.openingDate)} ) ?`;
     setFlOpen(true);
   }
   function removeAction(id: number, flConfirm: boolean): void {
@@ -143,5 +143,3 @@ const Courses: React.FC = () => {
   );
 }
 export default Courses;
-
-

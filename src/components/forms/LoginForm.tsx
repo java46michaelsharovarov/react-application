@@ -10,8 +10,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useMediaQuery } from "@mui/material";
 type Props = {
     submitFn: (loginData: LoginData) => void;
+    closeAlert: () => void;
 }
 function Copyright(props: any) {
     return (
@@ -27,7 +29,9 @@ function Copyright(props: any) {
   }  
 const theme = createTheme();
 
-const LoginForm: React.FC<Props> = ({submitFn}) => {
+const LoginForm: React.FC<Props> = ({submitFn, closeAlert}) => {
+    const isLaptopOrDesktop = useMediaQuery('(min-width: 900px)');
+    const isMobileOrTablet = useMediaQuery('(min-width: 600px)');
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -37,23 +41,23 @@ const LoginForm: React.FC<Props> = ({submitFn}) => {
     };
     return (
         <ThemeProvider theme={theme}>
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" onFocus={closeAlert}>
             <CssBaseline />
             <Box
                 sx={{
-                    marginTop: 8,
+                    mt: {xs: 8, sm: 0, md: 8},
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                 }}
             >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: {xs: 1, sm: 0, md: 1}, bgcolor: 'secondary.main' }}>
                 <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
                 Login
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: {xs: 1, sm: 0, md: 1}}}>
                 <TextField
                     margin="normal"
                     required
@@ -63,6 +67,8 @@ const LoginForm: React.FC<Props> = ({submitFn}) => {
                     name="email"
                     autoComplete="email"
                     autoFocus
+                    sx={{ mt: {sm: 0, md: 1}}}
+                    size={isMobileOrTablet && !isLaptopOrDesktop ? 'small' : 'medium'}
                 />
                 <TextField
                     margin="normal"
@@ -73,13 +79,15 @@ const LoginForm: React.FC<Props> = ({submitFn}) => {
                     type="password"
                     id="password"
                     autoComplete="current-password"
+                    sx={{ mt: {sm: 0, md: 1}}}
+                    size={isMobileOrTablet && !isLaptopOrDesktop ? 'small' : 'medium'}
                 />
-                <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                <Button type="submit" fullWidth variant="contained" sx={{ mt: {xs: 3, sm: 0, md: 3}, mb: {xs: 2, sm: 0, md: 2} }}>
                     Submit
                 </Button>
             </Box>
             </Box>
-            <Copyright sx={{ mt: 8, mb: 4 }} />
+            <Copyright sx={{ mt: {xs: 8, sm: 1, md: 8}, mb: {xs: 4, sm: 1, md: 4} }} />
         </Container>
         </ThemeProvider>
     );
