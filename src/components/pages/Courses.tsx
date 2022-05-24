@@ -38,7 +38,7 @@ function getColumns(actionsFn: (params: GridRowParams) => JSX.Element[]): GridCo
 }
 
 const Courses: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   const courses: Course[] = useSelector<StateType, Course[]>(state => state.courses);
   const clientData: ClientData = useSelector<StateType, ClientData>(state => state.clientData);
   const [isEdit, setEdit] = useState(false);
@@ -51,18 +51,15 @@ const Courses: React.FC = () => {
   isMobileOrTablet = useMediaQuery('(min-width: 600px)');
 
   function getActions(params: GridRowParams): JSX.Element[] {
-    const actionElements: JSX.Element[] = clientData.isAdmin ? [
+    const actionElements: JSX.Element[] = [
       <GridActionsCellItem label="Details" showInMenu= {!isMobileOrTablet}
-        onClick={showDetails.bind(undefined, params.id as number)} icon={<Visibility />} />,      
+        onClick={showDetails.bind(undefined, params.id as number)} icon={<Visibility />} />
+      ]
+      clientData.isAdmin && actionElements.push(    
       <GridActionsCellItem label="Edit" showInMenu= {!isMobileOrTablet}
         onClick={() => editFn(params.id as number)} icon={<Edit />} />,
       <GridActionsCellItem label="Remove" showInMenu= {!isMobileOrTablet}
-        onClick={() => {showRemoveConfirmation(params.id as number)}} icon={<Delete />} />      
-    ] 
-    : [
-      <GridActionsCellItem label="Details" showInMenu= {!isMobileOrTablet}
-        onClick={showDetails.bind(undefined, params.id as number)} icon={<Visibility />} /> 
-    ] 
+        onClick={() => {showRemoveConfirmation(params.id as number)}} icon={<Delete />} />)
     return actionElements;
   }
   function showDetails(id: number) {

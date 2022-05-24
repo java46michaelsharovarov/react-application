@@ -3,20 +3,20 @@ import CoursesService from "./CoursesService";
 import { getRandomNumber } from "../util/random";
 export default class CoursesServiceArray implements CoursesService {
     courses: Course[] = []
-    add(course: Course): void {
+    async add(course: Course): Promise<void> {
         const id = getRandomNumber(100000, 999999);
         course.id = id;
         this.courses.push(course); 
     }
-    remove(id: number): void {
+    async remove(id: number): Promise<void> {
         const index: number = this.getIndex(id);
         this.courses.splice(index, 1);
     }
-    update(id: number, course: Course): void {
+    async update(id: number, course: Course): Promise<void> {
         const index: number = this.getIndex(id);
             this.courses[index] = course;
     }
-    get(): Course[] {
+    async get(): Promise<Course[]> {
         return this.courses.slice();
     }
     private getIndex(id: number) {

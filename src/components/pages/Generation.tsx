@@ -7,11 +7,12 @@ import { range } from "../../util/functions";
 import { Button, Grid, TextField } from "@mui/material";
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import { Link as RouterLink} from "react-router-dom";
+import { COURSES_PATH } from "../../config/routes-config";
 let inputElement: any;
 
 const Generation: React.FC = () => {
     useEffect(() => {inputElement = document.getElementById("inputGeneration")}, [])
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<any>();
     function coursesGeneration(): void {    
        range(0, inputElement.value).forEach(i => dispatch(addCourse(getRandomCourse(courseData))));
     }
@@ -22,7 +23,7 @@ const Generation: React.FC = () => {
                 </Grid>
                 <Grid item xs={10} sm={6}>
                     <Button onClick={coursesGeneration} 
-                     key={"/"} component={RouterLink} to={"/"} 
+                     key={COURSES_PATH} component={RouterLink} to={COURSES_PATH} 
                      fullWidth variant="contained" endIcon={<PlaylistAddIcon />}>
                         Generation
                     </Button>

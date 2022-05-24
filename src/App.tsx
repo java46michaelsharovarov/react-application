@@ -4,13 +4,16 @@ import { COURSES_PATH, LOGIN_PATH, ROUTES } from './config/routes-config';
 import Navigator from './components/navigators/Navigator';
 import { Box } from '@mui/material';
 import { ClientData } from './models/ClientData';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StateType } from './redux/store';
 import { RouteType } from './models/RouteType';
+import { getCourses } from './redux/actions';
 // import { useImitator } from './util/useImitator';
 
 const App: React.FC = () => {
   // useImitator();
+  const dispatch = useDispatch<any>();
+  dispatch(getCourses());
   const clientData: ClientData = useSelector<StateType, ClientData>(state => state.clientData)
   const [flNavigate, setFlNavigate] = React.useState<boolean>(true);
   const relevantItems: RouteType[] = useMemo<RouteType[]> (() => getRelevantItems(clientData), [clientData])

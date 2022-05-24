@@ -9,7 +9,7 @@ import { StateType } from "../redux/store";
 import { useEffect } from "react";
 
 export function useImitator() {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<any>();
     const courses: Course[] = useSelector<StateType, Course[]>(state => state.courses);
     useEffect(() => {
         const intervalId = setInterval(action, 500)
