@@ -1,6 +1,6 @@
 import { Collapse, FormControl, InputLabel, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { Button, Grid } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Course } from "../../models/Course";
 import { StateType } from "../../redux/store";
@@ -11,19 +11,19 @@ type Props = {
     arrayIntervals: number[];
     columns: GridColumns
 }
-let inputElement: any;
 
 const Statistics: React.FC<Props> = ({typeStatistics, arrayIntervals, columns}) => {
-    useEffect(() => {inputElement = document.getElementById("intervals-select")}, []) 
     const courses: Course[] = useSelector<StateType, Course[]>(state => state.courses);
     const resObj = getStatistics(courses, typeStatistics); 
-    const [statisticsInterval, setStatisticsInterval] = useState(arrayIntervals[0]);   
+    const [statisticsInterval, setStatisticsInterval] = useState("");   
     const [tableVisibility, setTableVisibility] = useState(false);    
     function statisticsCalc(event: any): void {   
         event.preventDefault(); 
-        setStatisticsInterval(+inputElement.textContent);
         setTableVisibility(true);
      }
+     function handlerSelect(event: any) {
+        setStatisticsInterval(event.target.value);
+    }
     return  <>
                 <Grid item xs={12} sx={{display: 'flex', justifyContent: 'center'}}>
                     <TableContainer component={Paper} sx={{
@@ -64,6 +64,8 @@ const Statistics: React.FC<Props> = ({typeStatistics, arrayIntervals, columns}) 
                                         id="intervals-select"
                                         label="Intervals"
                                         size="small"
+                                        value={statisticsInterval}
+                                        onChange={handlerSelect}
                                     >
                                         {arrayIntervals.map(c => <MenuItem value={c} key={c}>{c}</MenuItem>)}
                                     </Select>
@@ -83,7 +85,7 @@ const Statistics: React.FC<Props> = ({typeStatistics, arrayIntervals, columns}) 
                 <Collapse in={tableVisibility}>
                 <Grid sx={{ height: {xs: '50vh', sm: '80vh', md: '50vh'}}}>
                     <DataGrid                    
-                        rows={getStatisticsRows(courses, 'cost', statisticsInterval)}
+                        rows={getStatisticsRows(courses, typeStatistics, statisticsInterval)}
                         columns={columns}
                         rowHeight={30}
                     />

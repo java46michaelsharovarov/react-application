@@ -40,12 +40,17 @@ export function getCanonicalLocalDate(date: Date) : string{ // returns local dat
     date = new Date(date.getTime() - (offset*60*1000))
     return date.toISOString().split('T')[0]
 }
-export function getStatisticsRows(array: Course[], key: keyof Course, interval: number): {id: number; from: number; to: number; amount: number}[] {
-    const res =_.countBy(array, (course) => Math.floor(+course[key]/interval));
+export function getStatisticsRows(array: Course[], key: keyof Course, interval: number | string): {id: number; from: number; to: number; amount: number}[] {
+    const inrervalNum: number = +interval;
+    if(inrervalNum === 0) {
+        return [{id:0, from:0, to:0, amount:0}]
+    }
+    
+    const res =_.countBy(array, (course) => Math.floor(+course[key]/inrervalNum));
     return Object.entries(res).map((e: any) => ({
-        id: e[0]*interval,
-        from : e[0]*interval, 
-        to : (e[0]*interval)+(interval-1),
+        id: e[0]*inrervalNum,
+        from : e[0]*inrervalNum, 
+        to : (e[0]*inrervalNum)+(inrervalNum-1),
         amount : e[1]
     }));
 }
