@@ -9,6 +9,6 @@
     "maxYear" : 2022,
     "minId" : 100000,
     "maxId" : 999999,
-    "hoursLengthInterval" : 10,
-    "costLengthInterval" : 2000 
+    "hoursIntervals" : [10, 20, 50, 100],
+    "costIntervals" : [100, 500, 1000, 5000]
 }

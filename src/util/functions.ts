@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { Course } from "../models/Course";
 import { RouteType } from "../models/RouteType";
 export function range(firstIndex: number, lastIndex: number): number[] {
@@ -38,4 +39,13 @@ export function getCanonicalLocalDate(date: Date) : string{ // returns local dat
     const offset: number  = date.getTimezoneOffset()
     date = new Date(date.getTime() - (offset*60*1000))
     return date.toISOString().split('T')[0]
+}
+export function getStatisticsRows(array: Course[], key: keyof Course, interval: number): {id: number; from: number; to: number; amount: number}[] {
+    const res =_.countBy(array, (course) => Math.floor(+course[key]/interval));
+    return Object.entries(res).map((e: any) => ({
+        id: e[0]*interval,
+        from : e[0]*interval, 
+        to : (e[0]*interval)+(interval-1),
+        amount : e[1]
+    }));
 }

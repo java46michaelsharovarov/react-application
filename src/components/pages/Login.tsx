@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { ClientData } from "../../models/ClientData";
 import { LoginData } from "../../models/LoginData";
 import { authAction } from "../../redux/actions";
-import AuthServiceClient from "../../service/AuthServiceClient";
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
@@ -12,7 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import LoginForm from "../forms/LoginForm";
 import { useNavigate } from 'react-router-dom';
 import { COURSES_PATH } from '../../config/routes-config';
-const authService = new AuthServiceClient(); 
+import { authService } from '../../config/service-config';
 
 const Login: React.FC = () => {
     const navigate = useNavigate();    
@@ -38,12 +37,14 @@ const Login: React.FC = () => {
                      Incorrect email or/and password
                     </Alert>
                 </Collapse>
-                <LoginForm submitFn={(loginData: LoginData) => {
-                    const clientData = authService.login(loginData);
+                <LoginForm submitFn={async function(loginData: LoginData): Promise<boolean> {
+                    const clientData = await authService.login(loginData);
                     if(!!clientData) {
                         dispatch(authAction(clientData as ClientData));
-                        navigate(COURSES_PATH)
-                     } else { setError(true);}
+                        navigate(COURSES_PATH);
+                        return true;
+                     } else { setError(true) }
+                     return false;
                 }} closeAlert={()=> setError(false)}/> 
             </Box>           
 }

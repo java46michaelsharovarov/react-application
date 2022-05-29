@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { COURSES_PATH, LOGIN_PATH, ROUTES } from './config/routes-config';
 import Navigator from './components/navigators/Navigator';
@@ -13,7 +13,7 @@ import { getCourses } from './redux/actions';
 const App: React.FC = () => {
   // useImitator();
   const dispatch = useDispatch<any>();
-  dispatch(getCourses());
+  useEffect(()=> {dispatch(getCourses())});
   const clientData: ClientData = useSelector<StateType, ClientData>(state => state.clientData)
   const [flNavigate, setFlNavigate] = React.useState<boolean>(true);
   const relevantItems: RouteType[] = useMemo<RouteType[]> (() => getRelevantItems(clientData), [clientData])
