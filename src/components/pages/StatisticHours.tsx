@@ -1,33 +1,21 @@
+import { Grid } from "@mui/material";
 import React from "react";
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import { useSelector } from "react-redux";
-import { Course } from "../../models/Course";
-import { StateType } from "../../redux/store";
-import getStatistics from "../../util/functions";
+import courseData from "../../config/courseData.json";
+import { GridColumns } from '@mui/x-data-grid';
+import Statistics from "./Statistics";
+const columns: GridColumns = [
+    { field: 'from', headerName: 'From (Hours)', flex: 1, headerAlign: "center", align: "center" },
+    { field: 'to', headerName: 'To (Hours)', flex: 1, headerAlign: "center", align: "center" },
+    { field: 'amount', headerName: 'Amount', flex: 1, headerAlign: "center", align: "center" }
+  ];
 
 const StatisticHours: React.FC = () => {
-    const courses: Course[] = useSelector<StateType, Course[]>(state => state.courses);
-    const resObj = getStatistics(courses, 'hours');
-    return  <TableContainer component={Paper} sx={{width: { xs:'90vw', sm:'80vw', md: '50vw' }, textAlign: 'center'}}>
-                {
-                    !resObj.min? <label style={{fontSize: "1.5em"}}>No Data</label>
-                    : (<Table size='small'>
-                            <TableHead>
-                                <TableRow>
-                                <TableCell align="center">Min Hours</TableCell>
-                                <TableCell align="center">Max Hours</TableCell>
-                                <TableCell align="center">Avg Hours</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                <TableRow key={resObj.avg}>
-                                    <TableCell align="center">{resObj.min}</TableCell>
-                                    <TableCell align="center">{resObj.max}</TableCell>
-                                    <TableCell align="center">{resObj.avg}</TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>)
-                }
-            </TableContainer>
+    const { hoursIntervals } = courseData;
+    return  <Grid container spacing = {2} justifyContent="center" alignItems="center" sx={{mt: {sm: '-8vw', md: '0'}}}>
+                <Grid item xs={12} sx={{textAlign: 'center', fontSize:'1.5em' }}>
+                Courses Hours Statistics
+                </Grid>
+                <Statistics typeStatistics="hours" columns={columns} arrayIntervals={hoursIntervals}/>
+            </Grid>
 }
 export default StatisticHours;
