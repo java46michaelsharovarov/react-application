@@ -17,9 +17,9 @@ const Logout: React.FC = () => {
             navigate(LOGIN_PATH);
         }
     }
-    return <Button onClick={onLogout}
+    return (<Button onClick={onLogout}
              variant="contained" endIcon={<LogoutIcon/>}>
                 Logout
-           </Button>
+           </Button>)
 }
 export default Logout;

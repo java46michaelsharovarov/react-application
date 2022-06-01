@@ -11,10 +11,10 @@ const NavigatorDesktop: React.FC<{items: RouteType[]}> = ({items}) => {
     function getTabs(): React.ReactNode {
         return items.map(item => <Tab key={item.path} component={RouterLink} to={item.path} label={item.label}/>)
     }
-    return <AppBar position={"fixed"} style={{alignItems: 'center'}}>
+    return (<AppBar position={"fixed"} style={{alignItems: 'center'}}>
                 <Tabs value={tabNumber} textColor="inherit" indicatorColor="secondary">
                     {getTabs()}
                 </Tabs>
-           </AppBar>
+           </AppBar>)
 }
 export default NavigatorDesktop;

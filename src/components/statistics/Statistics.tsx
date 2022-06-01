@@ -9,22 +9,30 @@ import { DataGrid, GridColumns } from '@mui/x-data-grid';
 type Props = {
     typeStatistics: keyof Course;
     arrayIntervals: number[];
-    columns: GridColumns
+    unit: string
+}   
+function getColumns(unit: string): GridColumns {
+    const columns: GridColumns = [
+        { field: 'from', headerName: `From (${unit})`, flex: 1, headerAlign: "center", align: "center" },
+        { field: 'to', headerName: `To (${unit})`, flex: 1, headerAlign: "center", align: "center" },
+        { field: 'amount', headerName: 'Amount', flex: 1, headerAlign: "center", align: "center" }
+];
+return columns;
 }
 
-const Statistics: React.FC<Props> = ({typeStatistics, arrayIntervals, columns}) => {
+const Statistics: React.FC<Props> = ({typeStatistics, arrayIntervals, unit}) => { 
     const courses: Course[] = useSelector<StateType, Course[]>(state => state.courses);
     const resObj = getStatistics(courses, typeStatistics); 
     const [statisticsInterval, setStatisticsInterval] = useState("");   
     const [tableVisibility, setTableVisibility] = useState(false);    
-    function statisticsCalc(event: any): void {   
+    function handlerSubmit(event: any): void {   
         event.preventDefault(); 
         setTableVisibility(true);
      }
      function handlerSelect(event: any) {
         setStatisticsInterval(event.target.value);
     }
-    return  <>
+    return  (<>
                 <Grid item xs={12} sx={{display: 'flex', justifyContent: 'center'}}>
                     <TableContainer component={Paper} sx={{
                         width: { xs:'90vw', sm:'80vw', md: '50vw' },                     
@@ -54,7 +62,7 @@ const Statistics: React.FC<Props> = ({typeStatistics, arrayIntervals, columns}) 
                 {
                     !resObj.min? ""
                     : (<Grid item xs={12}>
-                        <form  onSubmit={statisticsCalc} style={{ width: '100%'}}>
+                        <form  onSubmit={handlerSubmit} style={{ width: '100%'}}>
                         <Grid item xs={12} container spacing = {3} justifyContent="center" alignItems="center">
                             <Grid item xs={8} sm={4} md={3}>
                                 <FormControl fullWidth required>
@@ -67,7 +75,7 @@ const Statistics: React.FC<Props> = ({typeStatistics, arrayIntervals, columns}) 
                                         value={statisticsInterval}
                                         onChange={handlerSelect}
                                     >
-                                        {arrayIntervals.map(c => <MenuItem value={c} key={c}>{c}</MenuItem>)}
+                                        {arrayIntervals.map(c => <MenuItem value={c} key={c}>{c} {unit}</MenuItem>)}
                                     </Select>
                                 </FormControl>                
                             </Grid>
@@ -86,12 +94,12 @@ const Statistics: React.FC<Props> = ({typeStatistics, arrayIntervals, columns}) 
                 <Grid sx={{ height: {xs: '50vh', sm: '80vh', md: '50vh'}}}>
                     <DataGrid                    
                         rows={getStatisticsRows(courses, typeStatistics, statisticsInterval)}
-                        columns={columns}
+                        columns={getColumns(unit)}
                         rowHeight={30}
                     />
                 </Grid>
                 </Collapse>       
                 </Grid>         
-            </>
+            </>)
 }
 export default Statistics;

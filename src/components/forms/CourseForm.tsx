@@ -41,7 +41,7 @@ const CourseForm: React.FC<Props> = ({ submitFn , courseUpdate}) => {
         courseCopy.openingDate = new Date(event.target.value)
         setCourse(courseCopy);
     }
-    return <form onSubmit={onSubmit} onReset={onReset} style={{ width: '80%'}}>
+    return (<form onSubmit={onSubmit} onReset={onReset} style={{ width: '80%'}}>
         <Grid container sx={{mt: {sm: '-8vw', md: '0'}}}
               spacing={{ xs: 4, sm: 1, md: 6 }} justifyContent="center" alignItems="center">
             <Grid item xs={12} sx={{textAlign: 'center', fontSize:'1.5em' }}>
@@ -115,7 +115,7 @@ const CourseForm: React.FC<Props> = ({ submitFn , courseUpdate}) => {
                 <Button fullWidth variant="contained" type="reset">{!!courseUpdate ? 'Cancel' : 'Reset'}</Button>
             </Grid>
         </Grid>
-    </form>
+    </form>)
 }
 export default CourseForm;
 

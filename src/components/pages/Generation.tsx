@@ -16,7 +16,7 @@ const Generation: React.FC = () => {
     function coursesGeneration(): void {    
        range(0, inputElement.value).forEach(i => dispatch(addCourse(getRandomCourse(courseData))));
     }
-    return  <Grid container maxWidth="sm" spacing = {4} justifyContent="center" alignItems="center">
+    return  (<Grid container maxWidth="sm" spacing = {4} justifyContent="center" alignItems="center">
                 <Grid item xs={10} sm={6}>
                     <TextField id="inputGeneration" fullWidth size="small" type="number"
                          label="Enter the number of courses" variant="outlined" required/>                    
@@ -28,6 +28,6 @@ const Generation: React.FC = () => {
                         Generation
                     </Button>
                 </Grid>    
-            </Grid> 
+            </Grid> )
 }
 export default Generation;

@@ -17,7 +17,7 @@ const Transition = React.forwardRef(function Transition(
   });
   
 const ActionConfirmation: React.FC<Props> = ({ open, title, content, confirmHandler }) => {
-    return  <Dialog
+    return  (<Dialog
                 open={open}
                 TransitionComponent={Transition}
                 aria-labelledby="alert-dialog-title"
@@ -37,6 +37,6 @@ const ActionConfirmation: React.FC<Props> = ({ open, title, content, confirmHand
                         <Button onClick={() => confirmHandler(false)}>Cancel</Button>
                     </DialogActions>
                 </Box>
-            </Dialog>            
+            </Dialog>)           
 }
 export default ActionConfirmation;

@@ -41,14 +41,16 @@ export function getCanonicalLocalDate(date: Date) : string{ // returns local dat
     return date.toISOString().split('T')[0]
 }
 export function getStatisticsRows(array: Course[], key: keyof Course, interval: number | string): {id: number; from: number; to: number; amount: number}[] {
-    const inrervalNum: number = +interval;
+    const inrervalNum: number = +interval;       
+    if(typeof array[0][key] !== 'number') {
+        throw `key ${key} doesn't exist or no number`
+    }
     if(inrervalNum === 0) {
         return [{id:0, from:0, to:0, amount:0}]
-    }
-    
+    } 
     const res =_.countBy(array, (course) => Math.floor(+course[key]/inrervalNum));
-    return Object.entries(res).map((e: any) => ({
-        id: e[0]*inrervalNum,
+    return Object.entries(res).map((e: any, i: number) => ({
+        id: i,
         from : e[0]*inrervalNum, 
         to : (e[0]*inrervalNum)+(inrervalNum-1),
         amount : e[1]
