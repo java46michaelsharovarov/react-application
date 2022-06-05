@@ -1,5 +1,5 @@
 export enum OperationCode {
-    OK, AUTH_ERROR, UNKNOWN, SERVER_UNAVAILABLE
+    OK, AUTH_ERROR, UNKNOWN, SERVER_UNAVAILABLE, RETRY
 }
 export class OperationCodeMessage {
     constructor(private _code: OperationCode, private _message: string) {}

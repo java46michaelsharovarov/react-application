@@ -111,11 +111,13 @@ const Courses: React.FC = () => {
                 setEdit(false) }}
               courseUpdate={updatedCourse.current} />
           </Box>
-        : <Box sx={{ height: '80vh', width: { xs: '100%', sm: '90%' }, mt: { sm: '-8vw', md: '0' } }}>
+        : <Box sx={{ width: { xs: '100%', sm: '90%' },
+                     mt: { sm: '-8vw', md: '0' } }}>
           <DataGrid
             rows={courses}
             columns={columns}
             rowHeight={30}
+            autoHeight={true}
           />
         </Box>
       }
