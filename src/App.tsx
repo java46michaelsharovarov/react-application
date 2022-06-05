@@ -7,10 +7,11 @@ import { ClientData, emptyClientData } from './models/ClientData';
 import { useDispatch, useSelector } from 'react-redux';
 import { StateType } from './redux/store';
 import { RouteType } from './models/RouteType';
-import { authAction, getCourses, setOperationCode } from './redux/actions';
+import { authAction, setCourses, setOperationCode } from './redux/actions';
 import { OperationCode, OperationCodeMessage } from './models/OperationCode';
 import ServerAlert from './components/Alerts/ServerAlert';
-import Spinner from './components/Spinner/Spinner';
+import { dataProvider } from './config/service-config';
+import { Course } from './models/Course';
 // import { useImitator } from './util/useImitator';
 const style = {
   position: 'absolute' as 'absolute',
@@ -30,13 +31,23 @@ const App: React.FC = () => {
   const dispatch = useDispatch<any>();
   const operationCode: OperationCode = useSelector<StateType, OperationCode> (state => state.operationCode);
   const clientData: ClientData = useSelector<StateType, ClientData>(state => state.clientData);
+  const courses: Course[] = useSelector<StateType, Course[]>(state => state.courses);
   const [flNavigate, setFlNavigate] = useState<boolean>(true);
   const [serverAlert, setServerAlert] = useState<boolean>(false);
-  const [onSpinner, setOnSpinner] = useState<boolean>(false);
-  const retryTimeout: number = 10;
   const relevantItems: RouteType[] = useMemo<RouteType[]> (() => getRelevantItems(clientData), [clientData]);
   const operationCodeCallback = useCallback(operationCodeHandler, [operationCode]);  
-  useEffect(()=> {dispatch(getCourses())}, [operationCode, clientData]);
+  dataProvider.setObservableData().subscribe({
+    next: courses_err => {
+      if(Array.isArray(courses_err)) {
+        if(JSON.stringify(courses) !== JSON.stringify(courses_err)){
+          dispatch(setCourses(courses_err as Course[]));
+      }      
+        dispatch(setOperationCode(OperationCode.OK));
+      } else {
+        dispatch(setOperationCode(courses_err as OperationCode));
+      }
+    }
+  })
   useEffect(() => setFlNavigate(false), []);
   useEffect(() => operationCodeCallback(), [operationCodeCallback]);
 
@@ -44,21 +55,14 @@ const App: React.FC = () => {
     if(operationCode === OperationCode.AUTH_ERROR) {
       dispatch(authAction(emptyClientData));
     } else if(operationCode === OperationCode.SERVER_UNAVAILABLE) {
-      operationCodeMessage = new OperationCodeMessage(operationCode,
-         `Unable to access the server !`);
-      setServerAlert(true);
-      setTimeout(()=> {
-        dispatch(setOperationCode(OperationCode.RETRY));
-        setServerAlert(false);
-        dispatch(getCourses());
-      }, retryTimeout*1000);
+        operationCodeMessage = new OperationCodeMessage(operationCode,
+          `Unable to access the server !`);        
+        setServerAlert(true);
     } else if(operationCode === OperationCode.UNKNOWN) {
-      operationCodeMessage = new OperationCodeMessage(operationCode, "Unknow error");
+        operationCodeMessage = new OperationCodeMessage(operationCode, "Unknow error");
       setServerAlert(true);
-    } else if(operationCode === OperationCode.RETRY) {      
-      setOnSpinner(true);
     } else {
-      setOnSpinner(false);
+       setServerAlert(false);
     }
   }
   return (<BrowserRouter>  
@@ -79,24 +83,17 @@ const App: React.FC = () => {
               hideBackdrop={true}
             >
               <Box sx={style}>
-                  <ServerAlert onAlert={serverAlert} retryTimeout={retryTimeout} operationCodeMessage={operationCodeMessage}/>
+                  <ServerAlert onAlert={serverAlert} operationCodeMessage={operationCodeMessage}/>
               </Box>
             </Modal>
-            <Modal
+            {/* <Modal
               open={onSpinner}
               aria-labelledby="spinner-modal-title"
               aria-describedby="spinner-modal-description"
               hideBackdrop={true}
             >
-              <Box sx={{
-                  position: 'absolute' as 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)'
-                }}>
-                      <Spinner/>
-                </Box>
-            </Modal>
+              
+            </Modal> */}
          </BrowserRouter>)
 }
 export default App;

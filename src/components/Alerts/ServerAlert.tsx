@@ -4,25 +4,28 @@ import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
 import { AlertTitle } from '@mui/material';
 import { OperationCodeMessage } from '../../models/OperationCode';
+import Spinner from '../Spinner/Spinner';
 type Props = {
-    onAlert: boolean
-    retryTimeout: number,
+    onAlert: boolean,
     operationCodeMessage: OperationCodeMessage
 }
 
-const ServerAlert: React.FC<Props> = ({onAlert, retryTimeout, operationCodeMessage}) => {
-    const [counter, setCounter] = React.useState(retryTimeout);
-    React.useEffect(() => {
-        const timer1 = setInterval(() => setCounter(counter - 1), 1000);
-        return () => clearInterval(timer1);
-      }, [counter]);
+const ServerAlert: React.FC<Props> = ({onAlert, operationCodeMessage}) => {
     return  (<Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                 <Collapse sx={{ mt: { sm: -7, md: 0}, width: '90%' }} in={onAlert}>
                 <Alert severity="error">                    
                     <AlertTitle>{operationCodeMessage.message}</AlertTitle>
                     {operationCodeMessage.code === 3 
-                        ? `Automatic retry after ${counter} seconds`
-                    : "restart the application"}
+                        ?  <> Waiting for retry
+                            <Box sx={{
+                                position: 'absolute' as 'absolute',
+                                top: '50%',
+                                left: '80%',
+                                transform: 'translate(-50%, -50%)'
+                            }}>
+                                    <Spinner/>
+                            </Box></>
+                    : "Restart the application"}
                 </Alert>
                 </Collapse>
             </Box>)           

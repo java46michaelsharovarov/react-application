@@ -10,18 +10,7 @@ export const OPERATION_CODE_ACTION = "operation-code";
 
 export function setCourses(courses: Course[]): PayloadAction<Course[]> {
     return {payload: courses, type: SET_COURSES_ACTION};
-} 
-export function getCourses(): (dispatch: any)=>void {
-    return async (dispatch)=> {
-        try {
-            const courses: Course[] = await dataProvider.get();
-            dispatch(setCourses(courses));
-            dispatch(setOperationCode(OperationCode.OK));
-        } catch (err: any) {
-            dispatch(setOperationCode(err));
-        }
-    };
-} 
+}
 export function addCourse(course: Course): (dispatch: any)=>void {
     return async (dispatch)=> {
         try {
