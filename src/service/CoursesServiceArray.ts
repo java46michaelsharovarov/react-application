@@ -28,7 +28,7 @@ export default class CoursesServiceArray implements CoursesService {
         }
         return index;
     }    
-    setObservableData(): Observable<Course[] | OperationCode> {
+    getObservableData(): Observable<Course[] | OperationCode> {
         return of(this.courses);
     }
 }

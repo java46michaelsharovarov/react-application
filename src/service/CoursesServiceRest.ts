@@ -3,6 +3,7 @@ import { Course } from "../models/Course";
 import { OperationCode } from "../models/OperationCode";
 import { AUTH_TOKEN_ITEM } from "./AuthServiceJwt";
 import CoursesService from "./CoursesService";
+let intervalId: any;
       
 function getHeaders(): any {
     return {Authorization: "Bearer " + localStorage.getItem(AUTH_TOKEN_ITEM),
@@ -21,13 +22,16 @@ async function responseProcessing(response: Response): Promise<any> {
 export default class CoursesServiceRest implements CoursesService {
     private observable: Observable<Course[] | OperationCode> | undefined;
     private observer: Subscriber<Course[] | OperationCode> | undefined;
+    private coursesJson: string = '';
     constructor(private url: string) {}
-    setObservableData(): Observable<Course[] | OperationCode> {  
-        if (!this.observable || this.observer!.closed) {
+    getObservableData(): Observable<Course[] | OperationCode> {  
+        if (!this.observable) {
             this.observable = new Observable(observer => {
-                let intervalId: any;
                 this.observer = observer;
                 this.observing();
+                if(intervalId) {
+                    clearInterval(intervalId);
+                }
                 intervalId = setInterval(this.observing.bind(this), POLLING_INTERVAL);
                 return ()=> clearInterval(intervalId);
             })
@@ -35,15 +39,21 @@ export default class CoursesServiceRest implements CoursesService {
         return this.observable;
     }
     private observing() {
-        this.get().then(courses => {this.observer?.next(courses)})
-            .catch(err=> {
-                if(err === OperationCode.UNKNOWN) {
-                    this.observer?.next(OperationCode.UNKNOWN); 
-                    this.observer?.complete();
-                } else {
+        this.get().then(courses => {
+            if (this.coursesJson !== JSON.stringify(courses)) {
+                this.observer?.next(courses)
+                this.coursesJson = JSON.stringify(courses);
+            }            
+        })
+        .catch(err => {
+            if (err == OperationCode.UNKNOWN){
+                this.observer?.next(OperationCode.UNKNOWN)
+                this.observer?.complete();
+            } else {
+                this.coursesJson = '';
                 this.observer?.next(err)
-                }
-            });
+            }            
+        })
     }
     async add(course: Course): Promise<void> {
         (course as any).userId = 1;

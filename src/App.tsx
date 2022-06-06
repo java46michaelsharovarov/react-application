@@ -35,19 +35,19 @@ const App: React.FC = () => {
   const [flNavigate, setFlNavigate] = useState<boolean>(true);
   const [serverAlert, setServerAlert] = useState<boolean>(false);
   const relevantItems: RouteType[] = useMemo<RouteType[]> (() => getRelevantItems(clientData), [clientData]);
-  const operationCodeCallback = useCallback(operationCodeHandler, [operationCode]);  
-  dataProvider.setObservableData().subscribe({
-    next: courses_err => {
-      if(Array.isArray(courses_err)) {
-        if(JSON.stringify(courses) !== JSON.stringify(courses_err)){
+  const operationCodeCallback = useCallback(operationCodeHandler, [operationCode]);    
+  useEffect(() => {
+    dataProvider.getObservableData().subscribe({
+      next: courses_err => {
+        if(Array.isArray(courses_err)) {
           dispatch(setCourses(courses_err as Course[]));
-      }      
-        dispatch(setOperationCode(OperationCode.OK));
-      } else {
-        dispatch(setOperationCode(courses_err as OperationCode));
+          dispatch(setOperationCode(OperationCode.OK));
+        } else {
+          dispatch(setOperationCode(courses_err as OperationCode));
+        }
       }
-    }
-  })
+    })
+  }, []);
   useEffect(() => setFlNavigate(false), []);
   useEffect(() => operationCodeCallback(), [operationCodeCallback]);
 
