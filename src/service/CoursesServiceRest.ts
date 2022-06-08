@@ -41,6 +41,7 @@ export default class CoursesServiceRest implements CoursesService {
     }
     private observing() {
         this.get().then(courses => {
+            requestСounter = 0;
             const coursesReceived = JSON.stringify(courses);
             if (this.coursesJson !== coursesReceived) {
                 this.observer?.next(courses)
@@ -48,7 +49,7 @@ export default class CoursesServiceRest implements CoursesService {
             }            
         })
         .catch(err => {
-            if (err == OperationCode.UNKNOWN || requestСounter === 3){
+            if (err === OperationCode.UNKNOWN || requestСounter === 6){
                 this.observer?.next(OperationCode.UNKNOWN);
                 this.observer?.complete();
             } else {

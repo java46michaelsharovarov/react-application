@@ -51,7 +51,6 @@ const App: React.FC = () => {
   useEffect(() => operationCodeCallback(), [operationCodeCallback]);
 
   function operationCodeHandler() { 
-    setServerAlert(false);
     if(operationCode === OperationCode.AUTH_ERROR) {
         dispatch(authAction(emptyClientData));
         operationCodeMessage = new OperationCodeMessage(operationCode, "Unknow error");
@@ -62,7 +61,8 @@ const App: React.FC = () => {
         setServerAlert(true);
     } else if(operationCode === OperationCode.UNKNOWN) {
         operationCodeMessage = new OperationCodeMessage(operationCode, "Unknow error");
-        setServerAlert(true);
+        setServerAlert(false);
+        setTimeout(() => setServerAlert(true));
     } else {
         setServerAlert(false);
     }
