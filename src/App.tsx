@@ -31,7 +31,6 @@ const App: React.FC = () => {
   const dispatch = useDispatch<any>();
   const operationCode: OperationCode = useSelector<StateType, OperationCode> (state => state.operationCode);
   const clientData: ClientData = useSelector<StateType, ClientData>(state => state.clientData);
-  const courses: Course[] = useSelector<StateType, Course[]>(state => state.courses);
   const [flNavigate, setFlNavigate] = useState<boolean>(true);
   const [serverAlert, setServerAlert] = useState<boolean>(false);
   const relevantItems: RouteType[] = useMemo<RouteType[]> (() => getRelevantItems(clientData), [clientData]);
@@ -47,22 +46,25 @@ const App: React.FC = () => {
         }
       }
     })
-  }, []);
+  }, [clientData]);
   useEffect(() => setFlNavigate(false), []);
   useEffect(() => operationCodeCallback(), [operationCodeCallback]);
 
   function operationCodeHandler() { 
+    setServerAlert(false);
     if(operationCode === OperationCode.AUTH_ERROR) {
-      dispatch(authAction(emptyClientData));
+        dispatch(authAction(emptyClientData));
+        operationCodeMessage = new OperationCodeMessage(operationCode, "Unknow error");
+        setServerAlert(true);
     } else if(operationCode === OperationCode.SERVER_UNAVAILABLE) {
         operationCodeMessage = new OperationCodeMessage(operationCode,
           `Unable to access the server !`);        
         setServerAlert(true);
     } else if(operationCode === OperationCode.UNKNOWN) {
         operationCodeMessage = new OperationCodeMessage(operationCode, "Unknow error");
-      setServerAlert(true);
+        setServerAlert(true);
     } else {
-       setServerAlert(false);
+        setServerAlert(false);
     }
   }
   return (<BrowserRouter>  
@@ -86,14 +88,6 @@ const App: React.FC = () => {
                   <ServerAlert onAlert={serverAlert} operationCodeMessage={operationCodeMessage}/>
               </Box>
             </Modal>
-            {/* <Modal
-              open={onSpinner}
-              aria-labelledby="spinner-modal-title"
-              aria-describedby="spinner-modal-description"
-              hideBackdrop={true}
-            >
-              
-            </Modal> */}
          </BrowserRouter>)
 }
 export default App;

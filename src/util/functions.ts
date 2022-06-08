@@ -43,7 +43,7 @@ export function getCanonicalLocalDate(date: Date) : string{ // returns local dat
 export function getStatisticsRows(array: Course[], key: keyof Course, interval: number | string): {id: number; from: number; to: number; amount: number}[] {
     const inrervalNum: number = +interval;       
     if(typeof array[0][key] !== 'number') {
-        throw `key ${key} doesn't exist or no number`
+        throw new Error(`key ${key} doesn't exist or no number`);
     }
     if(inrervalNum === 0) {
         return [{id:0, from:0, to:0, amount:0}]

@@ -25,7 +25,7 @@ const ServerAlert: React.FC<Props> = ({onAlert, operationCodeMessage}) => {
                             }}>
                                     <Spinner/>
                             </Box></>
-                    : "Restart the application"}
+                    : "Contact the application staff courses.admin@tel-ran.com"}
                 </Alert>
                 </Collapse>
             </Box>)           

@@ -4,12 +4,13 @@ import { OperationCode } from "../models/OperationCode";
 import { AUTH_TOKEN_ITEM } from "./AuthServiceJwt";
 import CoursesService from "./CoursesService";
 let intervalId: any;
+let requestСounter = 0;
+const POLLING_INTERVAL = 3000;
       
 function getHeaders(): any {
     return {Authorization: "Bearer " + localStorage.getItem(AUTH_TOKEN_ITEM),
     "Content-Type": "application/json"}
 }
-const POLLING_INTERVAL = 10000;
 async function responseProcessing(response: Response): Promise<any> {
     if (response.status < 400) {
         return await response.json();
@@ -40,17 +41,19 @@ export default class CoursesServiceRest implements CoursesService {
     }
     private observing() {
         this.get().then(courses => {
-            if (this.coursesJson !== JSON.stringify(courses)) {
+            const coursesReceived = JSON.stringify(courses);
+            if (this.coursesJson !== coursesReceived) {
                 this.observer?.next(courses)
-                this.coursesJson = JSON.stringify(courses);
+                this.coursesJson = coursesReceived;
             }            
         })
         .catch(err => {
-            if (err == OperationCode.UNKNOWN){
-                this.observer?.next(OperationCode.UNKNOWN)
+            if (err == OperationCode.UNKNOWN || requestСounter === 3){
+                this.observer?.next(OperationCode.UNKNOWN);
                 this.observer?.complete();
             } else {
                 this.coursesJson = '';
+                requestСounter += 1;
                 this.observer?.next(err)
             }            
         })
