@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useMediaQuery } from "@mui/material";
+import { authService } from "../../config/service-config";
 type Props = {
     submitFn: (loginData: LoginData) => Promise<boolean>;
     closeAlert: () => void;
@@ -39,6 +40,12 @@ const LoginForm: React.FC<Props> = ({submitFn, closeAlert}) => {
         const password:string = data.get('password') as string;
         submitFn({email: email, password: password});
     };
+    function getProviders(providers: {name: string, icon: string}[]): React.ReactNode {
+        return providers.map(p => <Button key={p.icon} 
+                                        onClick={()=> submitFn({email: "", password: p.name })}>
+                                    <img src = {p.icon} style={{width:"50px", height:"50px"}} alt = {p.name} />
+                                  </Button>)
+    }
     return (
         <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs" onFocus={closeAlert}>
@@ -85,6 +92,9 @@ const LoginForm: React.FC<Props> = ({submitFn, closeAlert}) => {
                 <Button type="submit" fullWidth variant="contained" sx={{ mt: {xs: 3, sm: 0, md: 3}, mb: {xs: 2, sm: 0, md: 2} }}>
                     Submit
                 </Button>
+                <Box sx={{display: "flex", justifyContent: "center"}}>
+                   {getProviders(authService.providers())}
+                </Box>                
             </Box>
             </Box>
             <Copyright sx={{ mt: {xs: 8, sm: 1, md: 8}, mb: {xs: 4, sm: 1, md: 4} }} />

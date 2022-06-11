@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { COURSES_PATH, LOGIN_PATH, LOGOUT_PATH, ROUTES } from './config/routes-config';
 import Navigator from './components/navigators/Navigator';
-import { Box, Modal } from '@mui/material';
+import { Box } from '@mui/material';
 import { ClientData, emptyClientData } from './models/ClientData';
 import { useDispatch, useSelector } from 'react-redux';
 import { StateType } from './redux/store';
@@ -12,18 +12,9 @@ import { OperationCode, OperationCodeMessage } from './models/OperationCode';
 import ServerAlert from './components/Alerts/ServerAlert';
 import { dataProvider } from './config/service-config';
 import { Course } from './models/Course';
+import { Subscription } from 'rxjs';
 // import { useImitator } from './util/useImitator';
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',  
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+
 let operationCodeMessage: OperationCodeMessage;
 
 const App: React.FC = () => {
@@ -33,10 +24,11 @@ const App: React.FC = () => {
   const clientData: ClientData = useSelector<StateType, ClientData>(state => state.clientData);
   const [flNavigate, setFlNavigate] = useState<boolean>(true);
   const [serverAlert, setServerAlert] = useState<boolean>(false);
+  const repeatedAuthError = useRef<boolean>(false);
   const relevantItems: RouteType[] = useMemo<RouteType[]> (() => getRelevantItems(clientData), [clientData]);
   const operationCodeCallback = useCallback(operationCodeHandler, [operationCode]);    
   useEffect(() => {
-    dataProvider.getObservableData().subscribe({
+    const subscription: Subscription = dataProvider.getObservableData().subscribe({
       next: courses_err => {
         if(Array.isArray(courses_err)) {
           dispatch(setCourses(courses_err as Course[]));
@@ -46,15 +38,20 @@ const App: React.FC = () => {
         }
       }
     })
+    return () => subscription.unsubscribe();
   }, [clientData]);
   useEffect(() => setFlNavigate(false), []);
   useEffect(() => operationCodeCallback(), [operationCodeCallback]);
 
   function operationCodeHandler() { 
     if(operationCode === OperationCode.AUTH_ERROR) {
-        dispatch(authAction(emptyClientData));
-        operationCodeMessage = new OperationCodeMessage(operationCode, "Unknow error");
-        setServerAlert(true);
+      if (repeatedAuthError.current) {
+          dispatch(setOperationCode(OperationCode.UNKNOWN));
+      } else {
+          repeatedAuthError.current = true;
+          setTimeout(()=> repeatedAuthError.current = false, 20000)
+          dispatch(authAction(emptyClientData));
+      }
     } else if(operationCode === OperationCode.SERVER_UNAVAILABLE) {
         operationCodeMessage = new OperationCodeMessage(operationCode,
           `Unable to access the server !`);        
@@ -67,7 +64,17 @@ const App: React.FC = () => {
         setServerAlert(false);
     }
   }
-  return (<BrowserRouter>  
+  return <>{ serverAlert
+          ? <Box sx={{
+                      position: 'absolute' as 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      width: {xs: 360, sm: 400}
+                    }}>
+                <ServerAlert onAlert={serverAlert} operationCodeMessage={operationCodeMessage}/>
+            </Box>
+          :<BrowserRouter>  
             <Navigator items={relevantItems} />
             {flNavigate && (clientData.email 
                               ? <Navigate to={COURSES_PATH}/> 
@@ -78,17 +85,7 @@ const App: React.FC = () => {
                 {getRoutes(relevantItems, clientData)}
               </Routes>
             </Box>
-            <Modal
-              open={serverAlert}
-              aria-labelledby="serverAlert-modal-title"
-              aria-describedby="serverAlert-modal-description"
-              hideBackdrop={true}
-            >
-              <Box sx={style}>
-                  <ServerAlert onAlert={serverAlert} operationCodeMessage={operationCodeMessage}/>
-              </Box>
-            </Modal>
-         </BrowserRouter>)
+         </BrowserRouter>}</>
 }
 export default App;
 

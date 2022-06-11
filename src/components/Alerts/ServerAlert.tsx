@@ -19,8 +19,8 @@ const ServerAlert: React.FC<Props> = ({onAlert, operationCodeMessage}) => {
                         ?  <> Waiting for retry
                             <Box sx={{
                                 position: 'absolute' as 'absolute',
-                                top: '50%',
-                                left: '80%',
+                                top: {xs: '150%', sm: '220%', md: '150%'},
+                                left: '50%',
                                 transform: 'translate(-50%, -50%)'
                             }}>
                                     <Spinner/>
